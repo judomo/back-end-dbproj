@@ -141,6 +141,35 @@ orderRouter.get('/getAll', (async (req, res) => {
 
 }));
 
+
+orderRouter.get('/getUserOrder/:id', (async (req, res) => {
+
+
+
+    Order.findAll({
+
+        where:{UserUserId: req.params.id},
+
+        // Make sure to include the products
+        include: [{
+            model: Camp,
+            required: false,
+            // Pass in the Product attributes that you want to retrieve
+            attributes: ['camp_id', 'name', 'price'],
+            through: {
+                // This block of code allows you to retrieve the properties of the join table
+                model: OrderCamp,
+                attributes: ['amount'],
+            }
+        }]
+    }).then( allOrders => {
+
+        res.json(allOrders)
+
+    }).catch( err => console.log(err));
+
+}));
+
 orderRouter.get('/deleteOrder/:id', (async (req, res) => {
 
     Order.destroy({

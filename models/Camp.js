@@ -39,7 +39,7 @@ module.exports = (sequelize, type) => {
             allowNull: false
         },
         building_number: {
-            type: type.INTEGER,
+            type: type.STRING,
             allowNull: false
         },
         price: {

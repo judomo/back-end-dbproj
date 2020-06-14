@@ -1,7 +1,7 @@
 const express = require('express');
 const campRouter = express.Router();
 
-const { Camp, Admin } = require('../db.js')
+const { Camp, Admin, OrderCamp, Order } = require('../db.js')
 
 
 campRouter.route('/getAllCamps').get(function( req, res, err) {
@@ -98,36 +98,85 @@ campRouter.route('/updateCamp/:id').post(function(req, res) {
         AdministratorAdminId: AdministratorAdminId,
         price: price }
 
-    let selector = {
-        where: { camp_id: req.params.id }
-    };
 
-    Camp.update(values, selector)
-        .then(() =>{
+    Camp.findOne({where: {camp_id: req.params.id}}).then(camp => {
 
-            res.json('Camp with ID ' + req.params.id + " was updated successfully");
+        let camp_price = camp.price
+
+        OrderCamp.findAll({where: {CampCampId: req.params.id}}).then(ordercamps => {
+
+            if (ordercamps.length !== 0) {
+
+                ordercamps.forEach(ordercamp => {
+
+
+                    Order.findOne({where: {order_id: ordercamp.OrderOrderId}}).then(order => {
+
+
+                        order.update({sum_of_pay: (order.sum_of_pay - (camp_price * ordercamp.amount)) + parseInt(values.price) * (ordercamp.amount)})
+
+
+                    })
+
+
+                })
+
+                camp.update(values)
+
+                res.json('Camp with ID ' + req.params.id + " was updated successfully");
+
+
+
+            } else {
+
+                camp.update(values)
+
+                res.json('Camp with ID ' + req.params.id + " was updated successfully");
+
+            }
 
         })
+    })
         .catch(err =>
             {
                 console.log(err);
-                res.json(err);
             }
         )
-
 
 
 });
 
 campRouter.route('/deleteCamp/:id/').get(function( req, res, err) {
 
-    Camp.destroy({
-        where: {
-            camp_id:req.params.id
-        }
-    }).then( () => {
-        res.json('Camp with ID ' + req.params.id + " was deleted successfully");
-    }).catch(err)
+    Camp.findOne({where: {camp_id: req.params.id}}). then( camp => {
+
+        let camp_price = camp.price
+
+        OrderCamp.findAll({where: {CampCampId: req.params.id}}).then(ordercamps => {
+
+            if (ordercamps.length !== 0) {
+
+                ordercamps.forEach(ordercamp => {
+
+
+                    Order.findOne({where: {order_id: ordercamp.OrderOrderId}}).then(order => {
+
+
+                        order.update({sum_of_pay: (order.sum_of_pay - (camp_price * ordercamp.amount))})
+
+                    })
+
+                })
+            }
+
+        }).then( () => {
+            camp.destroy().then( () => {
+
+                res.json('Camp with ID ' + req.params.id + " was deleted successfully");
+
+            }).catch(err)
+        })
+    })
 
 });
 
