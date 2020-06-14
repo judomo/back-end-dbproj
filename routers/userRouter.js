@@ -132,6 +132,95 @@ userRouter.post('/register', (req, res) => {
 
 
 
+userRouter.post('/userUpdate/', (req, res) => {
+
+
+    const {email, first_name, last_name, phone_1, phone_2, phone_3, password } = req.body;
+
+    let errors = [];
+
+    if (!email || !password  || !first_name || !last_name || !phone_1) {
+        res.send('Please enter all fields');
+        errors.push(' ');
+    }
+
+    if (password.length < 8) {
+        res.send('Password must be at least 8 characters');
+        errors.push(' ');
+    }
+
+    if (errors.length > 0) {
+        //res.send(errors)
+
+    } else {
+
+
+        User.findOne({where:{email: email},raw: true }).then(user => {
+
+            bcrypt.genSalt(10, (err, salt) => {
+
+                bcrypt.hash(password, salt, (err, hash) => {
+
+                    if (err) throw err;
+
+                    if(phone_1 && !phone_2 && !phone_3) {
+                        user.update({
+                            last_name: last_name,
+                            first_name: first_name,
+                            email: email,
+                            phone_1: phone_1,
+                            password: hash,
+                        }).then((user) => {
+
+                            res.json(user)
+
+                        }).catch(err => console.log(err));
+
+                    }
+
+                    else if (phone_1 && phone_2 && !phone_3){
+
+                        user.update({
+                            last_name: last_name,
+                            first_name: first_name,
+                            email: email,
+                            phone_1: phone_1,
+                            phone_2: phone_2,
+                            password: password,
+                        }).then((user) => {
+
+                            res.json(user)
+
+                        }).catch(err => console.log(err));
+
+                    }
+                    else {
+
+                        user.update({
+                            last_name: last_name,
+                            first_name: first_name,
+                            email: email,
+                            phone_1: phone_1,
+                            phone_2: phone_2,
+                            phone_3: phone_3,
+                            password: password,
+                        }).then((user) => {
+
+                            res.json(user)
+
+                        }).catch(err => console.log(err));
+                    }
+                });
+            });
+
+
+
+        });
+    }
+});
+
+
+
 // Login
 userRouter.post('/login', (req, res, next) => {
     passport.authenticate('local', {
