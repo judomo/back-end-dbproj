@@ -29,7 +29,7 @@ Order.belongsToMany(Camp,
     { through: OrderCamp, unique: false })
 
 Camp.belongsToMany(Order, { through: OrderCamp, unique: false })
-Admin.hasMany(Camp, { onDelete: 'no action' })
+Admin.hasMany(Camp, { onDelete: 'no action', allowNull: false })
 User.hasMany(Order)
 
 

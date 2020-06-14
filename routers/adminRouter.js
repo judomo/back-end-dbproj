@@ -1,7 +1,7 @@
 const express = require('express');
 const adminRouter = express.Router();
 
-const { Admin } = require('../db.js')
+const { Admin, Camp } = require('../db.js')
 
 adminRouter.route('/createAdmin').post(function(req, res) {
 
@@ -83,13 +83,46 @@ adminRouter.route('/getExactAdmin/:id/').get(function( req, res, err) {
 
 adminRouter.route('/deleteAdmin/:id/').get(function( req, res, err) {
 
-    Admin.destroy({
-        where: {
-            admin_id:req.params.id
+    Camp.findAll({where: {AdministratorAdminId: req.params.id}}).then( camps => {
+
+        if(camps.length !== 0){
+
+            let response = {
+
+                msg: "Can't delete because Admin Profile in use",
+                deleteStatus : false
+
+            }
+
+            res.json(response);
+
         }
-    }).then( () => {
-        res.json('Camp with ID ' + req.params.id + " was deleted successfully");
-    }).catch(err)
+
+        else {
+
+            Admin.destroy({
+                where: {
+                    admin_id:req.params.id
+                }
+            }).then( () => {
+
+                let response = {
+
+                    msg: 'Camp with ID ' + req.params.id + " was deleted successfully",
+                    deleteStatus : true
+
+                }
+
+                res.json(response);
+
+            }).catch(err)
+
+        }
+
+
+    })
+
+
 
 });
 
