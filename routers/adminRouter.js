@@ -23,4 +23,74 @@ adminRouter.route('/createAdmin').post(function(req, res) {
 
 });
 
+adminRouter.route('/updateAdmin/:id').post(function(req, res) {
+
+
+    const {last_name, first_name, email, phone} = req.body;
+
+    let values =  { name: name ,
+        last_name: last_name,
+        first_name: first_name,
+        email: email,
+        phone: phone,
+    }
+
+    let selector = {
+        where: { admin_id: req.params.id }
+    };
+
+    Admin.update(values, selector)
+
+        .then(() =>{
+
+            res.json('Camp with ID ' + req.params.id + " was updated successfully");
+
+        })
+        .catch(err =>
+            {
+                console.log(err);
+                res.json(err);
+            }
+        )
+});
+
+adminRouter.route('/getAllAdmins').get(function( req, res, err) {
+
+    Admin.findAll({raw: true}).then( admins =>{
+
+        res.json(admins);
+        res.status(200);
+
+
+    }).catch( err=> console.log(err));
+});
+
+adminRouter.route('/getExactAdmin/:id/').get(function( req, res, err) {
+
+
+    Admin.findOne({
+
+        where: {admin_id: req.params.id},
+        raw: true
+
+    }).then(admin => {
+
+            res.json(admin)
+
+        }).catch(err => console.log(err));
+})
+
+
+adminRouter.route('/deleteAdmin/:id/').get(function( req, res, err) {
+
+    Admin.destroy({
+        where: {
+            admin_id:req.params.id
+        }
+    }).then( () => {
+        res.json('Camp with ID ' + req.params.id + " was deleted successfully");
+    }).catch(err)
+
+});
+
 module.exports = adminRouter;
