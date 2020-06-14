@@ -36,21 +36,14 @@ userRouter.post('/register', (req, res) => {
 
     console.log(req.body)
 
-    const {email, first_name, last_name, phone_1, phone_2, phone_3, password, password2 } = req.body;
+    const {email, first_name, last_name, phone_1, phone_2, phone_3, password } = req.body;
 
     let errors = [];
 
-    if (!email || !password || !password2 || !first_name || !last_name || !phone_1) {
+    if (!email || !password  || !first_name || !last_name || !phone_1) {
         res.send('Please enter all fields');
         errors.push(' ');
     }
-
-    if (password !== password2) {
-        res.send('Passwords do not match' );
-        errors.push(' ');
-    }
-
-    //console.log(validator.isEmail(email));
 
     if (password.length < 8) {
         res.send('Password must be at least 8 characters');

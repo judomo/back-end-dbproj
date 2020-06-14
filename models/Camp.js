@@ -22,6 +22,10 @@ module.exports = (sequelize, type) => {
             type: type.INTEGER,
             allowNull: false
         },
+        place_name: {
+            type: type.STRING,
+            allowNull: false
+        },
         oblast: {
             type: type.STRING,
             allowNull: false

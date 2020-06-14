@@ -6,7 +6,7 @@ const { Camp, Admin } = require('../db.js')
 
 campRouter.route('/getAllCamps').get(function( req, res, err) {
 
-    Camp.findAll({attributes: ['camp_id','name', 'description', 'price', 'place_type', 'oblast', 'district', 'street', 'building_number', ], raw: true}).then( camps =>{
+    Camp.findAll({attributes: ['camp_id','name','place_name', 'description', 'price', 'place_type', 'oblast', 'district', 'street', 'building_number', ], raw: true}).then( camps =>{
 
             res.json(camps);
             res.status(200);
@@ -23,7 +23,7 @@ campRouter.route('/getExactCamp/:id/').get(function( req, res, err) {
 
         where: {camp_id: req.params.id},
         raw: true,
-        attributes: ['name', 'food_and_place', 'description', 'price', 'place_type', 'oblast', 'district', 'street', 'building_number','AdministratorAdminId']
+        attributes: ['name','place_name', 'food_and_place', 'description', 'price', 'place_type', 'oblast', 'district', 'street', 'building_number','AdministratorAdminId']
 
     }).then(camp => {
 
@@ -33,6 +33,7 @@ campRouter.route('/getExactCamp/:id/').get(function( req, res, err) {
             let adminCamp = {
                 admin_id:req.params.id,
                 name: camp.name,
+                place_name: camp.place_name,
                 food_and_place: camp.food_and_place,
                 description: camp.description,
                 price: camp.price,
@@ -55,13 +56,14 @@ campRouter.route('/getExactCamp/:id/').get(function( req, res, err) {
 campRouter.route('/createCamp').post(function(req, res) {
 
 
-    const {name, description, food_and_place, place_type, oblast, district, street, building_number, AdministratorAdminId, price} = req.body;
+    const {name, description, food_and_place, place_type, place_name, oblast, district, street, building_number, AdministratorAdminId, price} = req.body;
 
     Camp.create({
         name: name,
         description: description,
         food_and_place: food_and_place,
         place_type: place_type,
+        place_name: place_name,
         oblast: oblast,
         district: district,
         street: street,
@@ -82,12 +84,13 @@ campRouter.route('/createCamp').post(function(req, res) {
 campRouter.route('/updateCamp/:id').post(function(req, res) {
 
 
-    const {name, description, food_and_place, place_type, oblast, district, street, building_number, AdministratorAdminId, price} = req.body;
+    const {name, description, food_and_place, place_type, place_name, oblast, district, street, building_number, AdministratorAdminId, price} = req.body;
 
     let values =  { name: name ,
         description: description,
         food_and_place: food_and_place,
         place_type: place_type,
+        place_name: place_name,
         oblast: oblast,
         district: district,
         street: street,

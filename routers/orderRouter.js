@@ -183,22 +183,5 @@ orderRouter.post('/deleteOrderLine/', (async (req, res) => {
 }));
 
 
-orderRouter.route('/getOrder/:id').get(function(req, res) {
-
-    Order.findOne({where: {order_id: req.params.id}})
-        .then(order => {
-
-            if(!order) res.json('Net takogo loh');
-
-            order.getCamps().then(camps=>{
-                for(camp of camps){
-                    res.log("camp:", camp.name);
-                }
-            });
-        });
-
-})
-
-
 
 module.exports = orderRouter;
