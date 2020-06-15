@@ -222,12 +222,22 @@ userRouter.post('/userUpdate/', (req, res) => {
 });
 
 // Login
-userRouter.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/api/users/successjson',
-        failureRedirect: '/api/users/failurejson',
-    },)(req, res, next);
-});
+// userRouter.post('/login', (req, res, next) => {
+//     passport.authenticate('local', {
+//
+//
+//         successRedirect: '/api/users/successjson',
+//         failureRedirect: '/api/users/failurejson',
+//     },)(req, res, next);
+// });
+
+userRouter.post('/login', passport.authenticate('local' , { failureRedirect: '/api/users/failurejson'}),
+    function(req, res) {
+        console.log(req.user);
+        req.session.user = req.user;
+        res.redirect('/api/users/successjson');
+    }
+);
 
 userRouter.get('/successjson', function(req, res) {
     res.send('success')

@@ -18,6 +18,7 @@ module.exports = function(passport) {
           console.log('user not found')
 
           return done(null, false, { message: 'That email is not registered' });
+
         }
 
         // Match password
@@ -25,13 +26,14 @@ module.exports = function(passport) {
           if (err) throw err;
           if (isMatch) {
 
-            console.log(user)
+            // console.log(user)
 
             return done(null, user);
 
           } else {
 
             return done(null, false, { message: 'Password incorrect' });
+
           }
 
         });
@@ -46,9 +48,11 @@ module.exports = function(passport) {
 
   passport.deserializeUser(function(id, done) {
     console.log("Deserialize")
-    User.findOne({where:{user_id:id},raw:true}, function(err, user) {
-      done(err, user);
-    });
+    User.findOne({where:{user_id:id}, raw: true}).then( user => {
+
+        done(null, user);
+
+    })
 
   });
 };
