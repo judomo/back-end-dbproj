@@ -155,7 +155,7 @@ userRouter.post('/userUpdate/', (req, res) => {
     } else {
 
 
-        User.findOne({where:{email: email},raw: true }).then(user => {
+        User.findOne({where:{email: email} }).then(user => {
 
             bcrypt.genSalt(10, (err, salt) => {
 
