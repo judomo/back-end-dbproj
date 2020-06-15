@@ -95,7 +95,6 @@ orderRouter.route('/createOrder').post(function(req, res) {
                         order.addCamp(camp, {through: {amount: amount}}).then(ordercamp => {
 
 
-
                             order.update()
 
                             res.json(ordercamp)
