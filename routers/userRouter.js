@@ -12,10 +12,12 @@ const { User } = require('../db.js')
 // Load User model
 const { ensureAuthenticated } = require('../config/auth');
 
-userRouter.get('/userCheck',ensureAuthenticated, (req, res) => {
+userRouter.get('/userCheck', ensureAuthenticated, (req, res) => {
+
     res.json({
         user: req.user
     });
+
 });
 
 
@@ -54,7 +56,6 @@ userRouter.post('/register', (req, res) => {
         //res.send(errors)
 
     } else {
-
 
                 User.findOne({where:{email: email},raw: true }).then(user => {
 
@@ -164,6 +165,7 @@ userRouter.post('/userUpdate/', (req, res) => {
                     if (err) throw err;
 
                     if(phone_1 && !phone_2 && !phone_3) {
+
                         user.update({
                             last_name: last_name,
                             first_name: first_name,
@@ -186,7 +188,7 @@ userRouter.post('/userUpdate/', (req, res) => {
                             email: email,
                             phone_1: phone_1,
                             phone_2: phone_2,
-                            password: password,
+                            password: hash,
                         }).then((user) => {
 
                             res.json(user)
@@ -203,7 +205,7 @@ userRouter.post('/userUpdate/', (req, res) => {
                             phone_1: phone_1,
                             phone_2: phone_2,
                             phone_3: phone_3,
-                            password: password,
+                            password: hash,
                         }).then((user) => {
 
                             res.json(user)
@@ -218,8 +220,6 @@ userRouter.post('/userUpdate/', (req, res) => {
         });
     }
 });
-
-
 
 // Login
 userRouter.post('/login', (req, res, next) => {

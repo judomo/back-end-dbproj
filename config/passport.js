@@ -16,14 +16,16 @@ module.exports = function(passport) {
 
         if (!user) {
           console.log('user not found')
+
           return done(null, false, { message: 'That email is not registered' });
         }
-
 
         // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) throw err;
           if (isMatch) {
+
+            console.log(user)
 
             return done(null, user);
 
@@ -38,15 +40,15 @@ module.exports = function(passport) {
   );
 
   passport.serializeUser(function(user, done) {
+    console.log("Serialize")
     done(null, user.user_id);
   });
 
   passport.deserializeUser(function(id, done) {
-    User.findOne({where:{user_id:id}, raw:true}, function(err, user) {
+    console.log("Deserialize")
+    User.findOne({where:{user_id:id},raw:true}, function(err, user) {
       done(err, user);
     });
-
-
 
   });
 };

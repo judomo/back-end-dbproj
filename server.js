@@ -18,29 +18,25 @@ app.use(cors());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
+app.use(cors({
+    origin: 'http://localhost:4000',
+    credentials: true
+}))
 
-require('./config/passport')(passport);
-
+app.use(cookieParser());
 
 app.use(session({secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000, secure: true }, unset: "destroy",}))
 
-app.use(cookieParser());
+
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(flash());
-
-app.use(function(req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-});
+require('./config/passport')(passport);
 
 
 app.use('/api',router);

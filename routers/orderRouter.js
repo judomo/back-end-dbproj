@@ -10,8 +10,6 @@ orderRouter.route('/createOrder').post(function(req, res) {
 
     Order.findAll({where: {UserUserId: user_id, isPaid:false}}).then(order => {
 
-        console.log(order[0])
-
         if(order.length !== 0){
 
             OrderCamp.findAll({where: {CampCampId:camp_id, OrderOrderId: order[0].order_id}, raw: true}).then( ordercamp => {
@@ -115,9 +113,6 @@ orderRouter.route('/createOrder').post(function(req, res) {
 
 orderRouter.get('/getAll', (async (req, res) => {
 
-    //
-
-
     Order.findAll({
 
         // Make sure to include the products
@@ -144,7 +139,6 @@ orderRouter.get('/getAll', (async (req, res) => {
 orderRouter.get('/getUserOrder/:id', (async (req, res) => {
 
 
-
     Order.findAll({
 
         where:{UserUserId: req.params.id},
@@ -164,6 +158,21 @@ orderRouter.get('/getUserOrder/:id', (async (req, res) => {
     }).then( allOrders => {
 
         res.json(allOrders)
+
+    }).catch( err => console.log(err));
+
+}));
+
+orderRouter.get('/payOrder/:id', (async (req, res) => {
+
+
+    Order.findOne({
+
+        where:{order_id: req.params.id}
+
+    }).then( order => {
+
+        order.update({isPaid: true})
 
     }).catch( err => console.log(err));
 
