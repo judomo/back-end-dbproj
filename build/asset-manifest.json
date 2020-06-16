@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.51fde8d1.chunk.css",
+    "main.js": "/static/js/main.b1e0722f.chunk.js",
+    "main.js.map": "/static/js/main.b1e0722f.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.a0243d46.js",
+    "runtime-main.js.map": "/static/js/runtime-main.a0243d46.js.map",
+    "static/css/2.0a896841.chunk.css": "/static/css/2.0a896841.chunk.css",
+    "static/js/2.302d68dd.chunk.js": "/static/js/2.302d68dd.chunk.js",
+    "static/js/2.302d68dd.chunk.js.map": "/static/js/2.302d68dd.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.17575d2d0da48ca423747093666f045f.js": "/precache-manifest.17575d2d0da48ca423747093666f045f.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.0a896841.chunk.css.map": "/static/css/2.0a896841.chunk.css.map",
+    "static/css/main.51fde8d1.chunk.css.map": "/static/css/main.51fde8d1.chunk.css.map",
+    "static/js/2.302d68dd.chunk.js.LICENSE.txt": "/static/js/2.302d68dd.chunk.js.LICENSE.txt",
+    "static/media/all_camps.css": "/static/media/camp.f0a560fa.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a0243d46.js",
+    "static/css/2.0a896841.chunk.css",
+    "static/js/2.302d68dd.chunk.js",
+    "static/css/main.51fde8d1.chunk.css",
+    "static/js/main.b1e0722f.chunk.js"
+  ]
+}
