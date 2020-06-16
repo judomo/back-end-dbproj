@@ -28,7 +28,7 @@ adminRouter.route('/updateAdmin/:id').post(function(req, res) {
 
     const {last_name, first_name, email, phone} = req.body;
 
-    let values =  { name: name ,
+    let values =  {
         last_name: last_name,
         first_name: first_name,
         email: email,

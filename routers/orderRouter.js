@@ -180,13 +180,28 @@ orderRouter.get('/payOrder/:id', (async (req, res) => {
 
 orderRouter.get('/deleteOrder/:id', (async (req, res) => {
 
-    Order.destroy({
+
+    Order.findOne({
         where: {
             order_id:req.params.id
         }
-    }).then( () => {
-        res.json('Order with ID ' + req.params.id + " was deleted successfully");
-    }).catch(err => console.log(err))
+    }).then( order =>{
+
+        if(!order.isPaid) {
+
+            order.destroy().then(() => {
+                res.json('Order with ID ' + req.params.id + " was deleted successfully");
+            }).catch(err => console.log(err))
+
+        }
+        else {
+
+            res.json("Cant delete paid order");
+
+        }
+    })
+
+
 
 }));
 
@@ -201,20 +216,58 @@ orderRouter.post('/deleteOrderLine/', (async (req, res) => {
         where: { order_id:order_id }
     };
 
-    Order.update(values, selector).then( () => {
 
-        OrderCamp.destroy({
-            where: {
-                OrderOrderId:order_id, CampCampId:camp_id
-            }
+    Order.findOne({
+        where: {
+            order_id:order_id
+        }
+    }).then( order =>{
 
-        }).then( () => {
+        if(!order.isPaid) {
 
-            res.json('OrderCamp with OrderID ' + order_id + " and CampId " + camp_id + " was deleted successfully");
 
-        }).catch(err => console.log(err))
+            OrderCamp.findAll({ where: {
+                    OrderOrderId:order_id
+                }}).then( order_camp => {
 
+                    console.log(order_camp)
+
+                if(order_camp.length===1) {
+
+
+                    order.destroy().then(() => {
+                        res.json('Order with ID ' + req.params.id + " was deleted successfully");
+                    }).catch(err => console.log(err))
+
+                }
+
+                else {
+
+                    order.update(values, selector).then(() => {
+
+                        OrderCamp.destroy({ where: {
+                                OrderOrderId:order_id,
+                                CampCampId: camp_id
+                            }}).then(() => {
+
+                            res.json('OrderCamp with OrderID ' + order_id + " and CampId " + camp_id + " was deleted successfully");
+
+                        }).catch(err => console.log(err))
+
+                    })
+
+                }
+
+            })
+
+        }
+        else {
+
+            res.json("Cant delete paid order line");
+
+        }
     })
+
 
 
 }));
