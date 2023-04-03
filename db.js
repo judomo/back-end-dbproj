@@ -6,8 +6,8 @@ const AdminModel = require('./models/Administrator')
 const CampModel = require('./models/Camp')
 const OrderModel = require('./models/Order')
 
-const sequelize = new Sequelize('db_project', 'root', null, {
-    host: '34.89.144.213',
+const sequelize = new Sequelize('sql7610783', 'sql7610783', 'RdgemsvI54', {
+    host: 'sql7.freemysqlhosting.net',
     dialect: 'mysql',
     timestamp:false,
     pool: {
@@ -47,4 +47,3 @@ module.exports = {
     Order,
     OrderCamp
 }
-
